@@ -83,20 +83,7 @@ public:
     }
 
 
-    std::string methodToString(HttpMethod method) const {
-        switch (method) {
-        case HttpMethod::GET    : return "GET";
-        case HttpMethod::POST   : return "POST";
-        case HttpMethod::PUT    : return "PUT";
-        case HttpMethod::DELETE : return "DELETE";
-        case HttpMethod::PATCH  : return "PATCH";
-        case HttpMethod::HEAD   : return "HEAD";
-        case HttpMethod::OPTIONS: return "OPTIONS";
-        case HttpMethod::TRACE  : return "TRACE";
-        case HttpMethod::CONNECT: return "CONNECT";
-        default                 : return "UNKNOWN";
-        }
-    }
+
 };
 
 } // namespace http_asio

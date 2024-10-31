@@ -90,11 +90,11 @@ namespace http_asio {
         }
 
     private:
-        std::vector<std::jthread> threads_; // 使用 std::jthread 管理线程
+        std::vector<std::jthread> threads_;
         std::queue<std::function<void()>> tasks_; // 任务队列
-        std::mutex mutex_; // 保护任务队列
-        std::condition_variable_any condition_; // 用于线程间的通知
-        bool stop_requested_; // 标识线程池是否已请求停止
+        std::mutex mutex_; 
+        std::condition_variable_any condition_; 
+        bool stop_requested_; 
     };
 
 } // namespace http_asio

@@ -20,6 +20,27 @@ namespace http_asio {
     using Progress = std::function<void(std::size_t, std::size_t)>;
     using ContentReceiver = std::function<void(const std::string&)>;
 
+    // 判断状态码
+    // 成功
+    inline bool isSuccessStatus(StatusCode status) {
+        return static_cast<int>(status) >= 200 && static_cast<int>(status) < 300;
+    }
+
+    // 重定向
+    inline bool isRedirectStatus(StatusCode status) {
+        return static_cast<int>(status) >= 300 && static_cast<int>(status) < 400;
+    }
+
+    // 客户端错误
+    inline bool isClientErrorStatus(StatusCode status) {
+        return static_cast<int>(status) >= 400 && static_cast<int>(status) < 500;
+    }
+
+    // 服务器错误
+    inline bool isServerErrorStatus(StatusCode status) {
+        return static_cast<int>(status) >= 500 && static_cast<int>(status) < 600;
+    }
+
     // URL 编码
     inline std::string url_encode(const std::string& value) {
         std::ostringstream escaped;
@@ -45,7 +66,7 @@ namespace http_asio {
                     std::string hex = value.substr(i + 1, 2);
                     char decoded_char = static_cast<char>(std::stoi(hex, nullptr, 16));
                     decoded += decoded_char;
-                    i += 2; // Skip past the hex digits
+                    i += 2;
                 }
             }
             else {
@@ -100,6 +121,21 @@ namespace http_asio {
 		str.erase(0, str.find_first_not_of(" \t\n\r"));
 		str.erase(str.find_last_not_of(" \t\n\r") + 1);
 	}
+
+    // Range请求的结构体定义，表示Range请求的起始和结束字节
+    struct Range {
+        std::optional<size_t> start;
+        std::optional<size_t> end;
+
+        std::string toString() const {
+            std::ostringstream oss;
+            oss << "bytes=";
+            if (start) oss << *start;
+            oss << "-";
+            if (end) oss << *end;
+            return oss.str();
+        }
+    };
 
 } // namespace http_asio
 

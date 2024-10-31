@@ -10,7 +10,6 @@
 #include <fstream>
 namespace http_asio {
 
-    // IO上下文管理类
     class IOContextWrapper {
     public:
         IOContextWrapper() : io_context_(std::make_shared<asio::io_context>()) {}
@@ -26,6 +25,11 @@ namespace http_asio {
         void stop() {
             io_context_->stop();
         }
+
+		~IOContextWrapper() {
+			stop();
+			std::cout << "IOContextWrapper destroyed" << std::endl;
+		}
 
     private:
         std::shared_ptr<asio::io_context> io_context_;
@@ -101,9 +105,10 @@ namespace http_asio {
             asio::async_read_until(socket_, asio::dynamic_buffer(buffer_), "\r\n",
                 [this, self, callback](const asio::error_code& ec, std::size_t bytes_transferred) {
                     if (!ec) {
-                        std::istream response_stream(&buffer_);
-                        std::string response_line;
-                        std::getline(response_stream, response_line);
+						std::string response_line(buffer_.substr(0, bytes_transferred - 2)); // 去掉末尾的 \r\n
+						//std::istream response_stream(response_line.data());
+                        //std::string response_line;
+                        //std::getline(response_stream, response_line);
                         callback(response_line, ec);
                     }
                     else {

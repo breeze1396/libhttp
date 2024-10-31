@@ -70,6 +70,9 @@
     <ClInclude Include="http.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="http_server_1.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="utils">

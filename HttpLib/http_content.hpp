@@ -18,7 +18,8 @@ namespace http_asio {
     class ContentReader : public std::enable_shared_from_this<ContentReader> {
     public:
         ContentReader(asio::io_context& io_context, asio::ip::tcp::socket& socket, const std::string& boundary)
-            : socket_(socket), boundary_(boundary), state_(ReadState::Idle) {}
+            : socket_(socket), boundary_(boundary),buffer_(4096),
+            state_(ReadState::Idle){}
 
         void setContentProvider(ContentProvider provider) {
             content_provider_ = provider;
@@ -76,12 +77,11 @@ namespace http_asio {
         }
 
     private:
-        // 内部状态定义
         enum class ReadState {
-            Idle,
-            Reading,
-            ParsingMultipart,
-            ChunkedTransfer
+            Idle,               // 
+            Reading,            // 
+            ParsingMultipart,   //
+            ChunkedTransfer     //
         };
 
         asio::ip::tcp::socket& socket_;
@@ -144,7 +144,7 @@ namespace http_asio {
             return std::string(buffer_.data(), bytes_transferred);
         }
 
-        std::vector<char> buffer_{ 4096 }; // 临时缓冲区
+        std::vector<char> buffer_; 
     };
 
 } // namespace http_asio
